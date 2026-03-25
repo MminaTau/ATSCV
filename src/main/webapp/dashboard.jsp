@@ -360,7 +360,7 @@
         <div class="menu-title">Navigation</div>
         <nav class="menu">
             <a href="dashboard.jsp" class="active">Dashboard</a>
-            <a href="#">Build CV</a>
+            <a href="cvBuilder.jsp">Build CV</a>
             <a href="#">ATS Analysis</a>
             <a href="#">Results</a>
             <a href="logout">Logout</a>
