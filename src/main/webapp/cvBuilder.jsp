@@ -432,9 +432,9 @@
             <div class="menu">
                 <a href="dashboard.jsp">⬛ Dashboard</a>
                 <a href="cv-builder" class="active">📄 CV Builder</a>
-                <a href="#">📊 ATS Analysis</a>
-                <a href="#">✅ Results</a>
-                <a href="#">👤 Profile</a>
+                <a href="atsanalysis">📊 ATS Analysis</a>
+                <a href="results">✅ Results</a>
+                <a href="profile">👤 Profile</a>
             </div>
         </div>
 
