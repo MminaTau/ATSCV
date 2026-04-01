@@ -5,9 +5,7 @@ import com.example.atscv.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -22,6 +20,12 @@ public class RegisterServlet extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("register.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -29,8 +33,27 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = new User(fullName, email, password);
+        // Basic validation
+        if (isBlank(fullName) || isBlank(email) || isBlank(password)) {
+            request.setAttribute("message", "All fields are required.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
 
+        if (password.length() < 8) {
+            request.setAttribute("message", "Password must be at least 8 characters.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        // Check for duplicate email before attempting insert
+        if (userDAO.emailExists(email.trim())) {
+            request.setAttribute("message", "An account with this email already exists. Please log in.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        User user = new User(fullName.trim(), email.trim(), password);
         boolean success = userDAO.registerUser(user);
 
         if (success) {
@@ -39,5 +62,9 @@ public class RegisterServlet extends HttpServlet {
             request.setAttribute("message", "Registration failed. Please try again.");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
+    }
+
+    private boolean isBlank(String s) {
+        return s == null || s.trim().isEmpty();
     }
 }
